@@ -75,3 +75,35 @@ type Owner struct {
 	DisplayName  string `json:"display_name"`
 	Link         string `json:"link"`
 }
+
+// Questions response
+
+type AnswerItem struct {
+	AnswerID int   `json:"answer_id"`
+	Owner    Owner `json:"owner"`
+}
+
+type AnswerIDsResponse struct {
+	Items []AnswerItem `json:"items"`
+}
+
+// Answer Response
+type Answer struct {
+	AnswerID int       `json:"answer_id"`
+	Body     string    `json:"body"`
+	Owner    Owner     `json:"owner"`
+	Comments []Comment `json:"comments"`
+}
+
+type AnswerResponse struct {
+	Items []Answer `json:"items"`
+}
+
+type Comment struct {
+	// Owner         Owner  `json:"owner"`
+	Score int `json:"score"`
+	// CreationDate  int64         `json:"creation_date"`
+	// PostID        int           `json:"post_id"`
+	CommentID int    `json:"comment_id"`
+	Body      string `json:"body"`
+}

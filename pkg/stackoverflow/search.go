@@ -86,4 +86,36 @@ func RegisterAll(mcps *server.MCPServer) {
 
 		return mcputil.JSONToolResult("Stackoverflow Question's Answers", response)
 	})
+
+	getAnswerTool := mcp.NewTool(
+		"stackoverflow_get_answer_by_id",
+		mcp.WithDescription("Retrieve stackoverflow answer body given an answer ID"),
+		mcp.WithNumber(
+			"answerID",
+			mcp.Description("The answer_id (integer) to retrieve answer body"),
+			mcp.Required(),
+		),
+	)
+
+	mcps.AddTool(getAnswerTool, func(_ context.Context, req mcp.CallToolRequest) (*mcp.CallToolResult, error) {
+		apiKey := os.Getenv("STACKOVERFLOW_API_KEY")
+		if apiKey == "" {
+			return nil, fmt.Errorf("STACKOVERFLOW_API_KEY environment variables is required")
+		}
+		// Initialize Stackoverflow client.
+		client := client.NewClient(apiKey)
+
+		// Extract parameters
+		answerID, ok := req.Params.Arguments["answerID"].(int)
+		if !ok || answerID == 0 {
+			return nil, fmt.Errorf("query parameter is required")
+		}
+
+		response, err := client.GetAnswer(answerID)
+		if err != nil {
+			return nil, fmt.Errorf("failed search request: %w", err)
+		}
+
+		return mcputil.JSONToolResult("Stackoverflow Question's Answers", response)
+	})
 }

@@ -31,3 +31,27 @@ func (c *SOClient) GetAnswerIDsByQuestionID(questionID int) ([]AnswerItem, error
 
 	return resp.Items, nil
 }
+
+func (c *SOClient) GetAnswers(questionID int) ([]Answer, error) {
+	aIDs, err := c.GetAnswerIDsByQuestionID(questionID)
+	if err != nil {
+		return nil, err
+	}
+	if len(aIDs) == 0 {
+		return nil, fmt.Errorf("no questions found")
+	}
+
+	// fetch all possible answers for every questionID we've received
+	var output []Answer
+	for _, item := range aIDs {
+		answer, err := c.GetAnswer(item.AnswerID)
+		if err != nil || answer == nil {
+			continue
+		}
+
+		// append answers
+		output = append(output, *answer)
+	}
+
+	return output, nil
+}

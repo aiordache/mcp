@@ -74,9 +74,9 @@ func RegisterAll(mcps *server.MCPServer) {
 		client := client.NewClient(apiKey)
 
 		// Extract parameters
-		questionID, ok := req.Params.Arguments["questionID"].(int)
-		if !ok || questionID == 0 {
-			return nil, fmt.Errorf("query parameter is required")
+		questionID := mcp.ParseInt(req, "questionID", 0)
+		if questionID == 0 {
+			return nil, fmt.Errorf("question ID parameter is required")
 		}
 
 		response, err := client.GetAnswerIDsByQuestionID(questionID)

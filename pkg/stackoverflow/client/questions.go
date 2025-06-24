@@ -7,20 +7,6 @@ import (
 	"net/url"
 )
 
-type AnswerOwner struct {
-	DisplayName string `json:"display_name"`
-	Link        string `json:"link"`
-}
-
-type AnswerItem struct {
-	AnswerID int         `json:"answer_id"`
-	Owner    AnswerOwner `json:"owner"`
-}
-
-type AnswersResponse struct {
-	Items []AnswerItem `json:"items"`
-}
-
 func (c *SOClient) GetAnswerIDsByQuestionID(questionID int) ([]AnswerItem, error) {
 	queryParam := url.Values{}
 	queryParam.Add("order", "desc")
@@ -38,7 +24,7 @@ func (c *SOClient) GetAnswerIDsByQuestionID(questionID int) ([]AnswerItem, error
 		return nil, fmt.Errorf("fail sendRequest: %w", err)
 	}
 
-	var resp AnswersResponse
+	var resp AnswerIDsResponse
 	if err = json.Unmarshal(data, &resp); err != nil {
 		return nil, fmt.Errorf("fail to decode answers response: %v", err)
 	}

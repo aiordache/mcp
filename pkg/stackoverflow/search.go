@@ -52,17 +52,17 @@ func RegisterAll(mcps *server.MCPServer) {
 		return mcputil.JSONToolResult("Stackoverflow Search", response)
 	})
 
-	getAnswerIDsByQuestionID := mcp.NewTool(
-		"stackoverflow_answer_ids_by_question_id",
-		mcp.WithDescription("Retrieve stackoverflow answers IDs given a question ID"),
+	stackOverflowGetAnswersTool := mcp.NewTool(
+		"stackoverflow_get_answers_by_question_id",
+		mcp.WithDescription("Retrieve contents of stackoverflow answers by question ID"),
 		mcp.WithNumber(
 			"questionID",
-			mcp.Description("The question_id (integer) to retrieve answer IDs"),
-			mcp.Required(),
+			mcp.Description("The question identifier to retrieve answers"),
+			mcp.DefaultNumber(0),
 		),
 	)
 
-	mcps.AddTool(getAnswerIDsByQuestionID, func(_ context.Context, req mcp.CallToolRequest) (*mcp.CallToolResult, error) {
+	mcps.AddTool(stackOverflowGetAnswersTool, func(_ context.Context, req mcp.CallToolRequest) (*mcp.CallToolResult, error) {
 		apiKey := os.Getenv("STACKOVERFLOW_API_KEY")
 		if apiKey == "" {
 			return nil, fmt.Errorf("STACKOVERFLOW_API_KEY environment variables is required")
@@ -73,16 +73,48 @@ func RegisterAll(mcps *server.MCPServer) {
 		// Extract parameters
 		questionID := mcp.ParseInt(req, "questionID", 0)
 		if questionID == 0 {
-			return nil, fmt.Errorf("question ID parameter is required")
+			return nil, fmt.Errorf("questionID parameter is required")
 		}
 
-		response, err := client.GetAnswerIDsByQuestionID(questionID)
+		response, err := client.GetAnswers(questionID)
 		if err != nil {
 			return nil, fmt.Errorf("failed search request: %w", err)
 		}
 
-		return mcputil.JSONToolResult("Stackoverflow Question's Answers", response)
+		return mcputil.JSONToolResult("Stackoverflow Search", response)
 	})
+
+	// getAnswerIDsByQuestionID := mcp.NewTool(
+	// 	"stackoverflow_answer_ids_by_question_id",
+	// 	mcp.WithDescription("Retrieve stackoverflow answers IDs given a question ID"),
+	// 	mcp.WithNumber(
+	// 		"questionID",
+	// 		mcp.Description("The question_id (integer) to retrieve answer IDs"),
+	// 		mcp.Required(),
+	// 	),
+	// )
+	//
+	// mcps.AddTool(getAnswerIDsByQuestionID, func(_ context.Context, req mcp.CallToolRequest) (*mcp.CallToolResult, error) {
+	// 	apiKey := os.Getenv("STACKOVERFLOW_API_KEY")
+	// 	if apiKey == "" {
+	// 		return nil, fmt.Errorf("STACKOVERFLOW_API_KEY environment variables is required")
+	// 	}
+	// 	// Initialize Stackoverflow client.
+	// 	client := client.NewClient(apiKey)
+	//
+	// 	// Extract parameters
+	// 	questionID := mcp.ParseInt(req, "questionID", 0)
+	// 	if questionID == 0 {
+	// 		return nil, fmt.Errorf("question ID parameter is required")
+	// 	}
+	//
+	// 	response, err := client.GetAnswerIDsByQuestionID(questionID)
+	// 	if err != nil {
+	// 		return nil, fmt.Errorf("failed search request: %w", err)
+	// 	}
+	//
+	// 	return mcputil.JSONToolResult("Stackoverflow Question's Answers", response)
+	// })
 
 	getAnswerTool := mcp.NewTool(
 		"stackoverflow_get_answer_by_id",

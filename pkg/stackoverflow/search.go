@@ -41,13 +41,10 @@ func RegisterAll(mcps *server.MCPServer) {
 		if !ok || query == "" {
 			return nil, fmt.Errorf("query parameter is required")
 		}
-		page := 1
-		pageNum, ok := req.Params.Arguments["page"]
-		if ok {
-			page = pageNum.(int)
-		}
 
-		response, err := client.Search(query, page)
+		page := mcp.ParseInt(req, "page", 1)
+
+		response, err := client.SearchAnswers(query, page)
 		if err != nil {
 			return nil, fmt.Errorf("failed search request: %w", err)
 		}

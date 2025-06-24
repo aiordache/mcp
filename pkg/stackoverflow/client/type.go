@@ -67,13 +67,13 @@ type SearchItem struct {
 }
 
 type Owner struct {
-	AccountID    int    `json:"account_id"`
-	Reputation   int    `json:"reputation"`
-	UserID       int    `json:"user_id"`
-	UserType     string `json:"user_type"`
-	ProfileImage string `json:"profile_image"`
-	DisplayName  string `json:"display_name"`
-	Link         string `json:"link"`
+	AccountID int `json:"account_id"`
+	// Reputation   int    `json:"reputation"`
+	// UserID       int    `json:"user_id"`
+	UserType string `json:"user_type"`
+	// ProfileImage string `json:"profile_image"`
+	DisplayName string `json:"display_name"`
+	Link        string `json:"link"`
 }
 
 // Questions response

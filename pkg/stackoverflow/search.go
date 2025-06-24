@@ -15,10 +15,10 @@ import (
 func RegisterAll(mcps *server.MCPServer) {
 	stackoverflowSearchTool := mcp.NewTool(
 		"stackoverflow_search",
-		mcp.WithDescription("Retrieve stackoverflow questions and answers"),
+		mcp.WithDescription("Retrieve stackoverflow questions and answers. Use one word query terms, singular tense for optimal results. Do not use 'algolia' as query search term"),
 		mcp.WithString(
 			"query",
-			mcp.Description("The string to search for in Stackoverflow questions and answers"),
+			mcp.Description("The string to search for in Stackoverflow questions and answers."),
 			mcp.Required(),
 		),
 		mcp.WithNumber(

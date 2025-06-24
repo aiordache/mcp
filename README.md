@@ -151,7 +151,7 @@ In the root directory of the repository, run:
 
 Run the MCP container with the 8080 mapped on the host and auth credentials passed as environment variables (transport must be set to sse):
 ```
-$ docker run -it -p8080:8080 -e MCP_SERVER_TYPE=sse -e MCP_SSE_PORT=8080 -e ALGOLIA_APP_ID=<APP-ID> -e ALGOLIA_API_KEY=<API-KEY> -e ALGOLIA_INDEX_NAME=<index> mcp
+$ docker run -it -p8080:8080 -e MCP_SERVER_TYPE=sse -e MCP_SSE_PORT=8080 -e ALGOLIA_APP_ID=<APP-ID> -e ALGOLIA_API_KEY=<API-KEY> -e ALGOLIA_INDEX_NAME=<index> -e 'STACKOVERFLOW_API_KEY=<SO_API_KEY>' mcp
 ```
 
 The URL of the MCP server to be set in Claude desktop: `http:127.0.0.1:8080/sse`

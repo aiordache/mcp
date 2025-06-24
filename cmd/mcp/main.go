@@ -20,6 +20,7 @@ import (
 	"github.com/algolia/mcp/pkg/querysuggestions"
 	"github.com/algolia/mcp/pkg/recommend"
 	searchpkg "github.com/algolia/mcp/pkg/search"
+	"github.com/algolia/mcp/pkg/stackoverflow"
 	"github.com/algolia/mcp/pkg/usage"
 
 	"github.com/mark3labs/mcp-go/server"
@@ -32,7 +33,7 @@ func main() {
 	// Parse MCP_ENABLED_TOOLS environment variable to determine which toolsets to enable
 	enabledToolsEnv := os.Getenv("MCP_ENABLED_TOOLS")
 	enabled := make(map[string]bool)
-	allTools := []string{"abtesting", "analytics", "collections", "monitoring", "querysuggestions", "recommend", "search", "search_read", "search_write", "usage"}
+	allTools := []string{"abtesting", "analytics", "collections", "monitoring", "querysuggestions", "recommend", "search", "search_read", "search_write", "stackoverflow_search", "usage"}
 
 	// If MCP_ENABLED_TOOLS is set, enable only the specified toolsets
 	// Otherwise, enable all toolsets
@@ -96,6 +97,9 @@ func main() {
 	}
 	if enabled["usage"] {
 		usage.RegisterAll(mcps)
+	}
+	if enabled["stackoverflow_search"] {
+		stackoverflow.RegisterAll(mcps)
 	}
 
 	// Create a logger that writes to stderr instead of stdout

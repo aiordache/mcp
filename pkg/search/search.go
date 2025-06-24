@@ -1,6 +1,8 @@
 package search
 
 import (
+	"os"
+
 	"github.com/algolia/algoliasearch-client-go/v3/algolia/search"
 	"github.com/algolia/mcp/pkg/search/indices"
 	"github.com/algolia/mcp/pkg/search/query"
@@ -12,7 +14,12 @@ import (
 func RegisterAll(mcps *server.MCPServer) {
 	// Initialize Algolia client.
 	// Note: In a real implementation, you would get the app ID and API key from environment variables.
-	client := search.NewClient("", "")
+	appID := os.Getenv("ALGOLIA_APP_ID")
+	apiKey := os.Getenv("ALGOLIA_API_KEY")
+	if appID == "" || apiKey == "" {
+		panic("ALGOLIA_APP_ID and ALGOLIA_API_KEY environment variables are required")
+	}
+	client := search.NewClient(appID, apiKey)
 	index := client.InitIndex("default_index")
 
 	// Register both read and write operations.

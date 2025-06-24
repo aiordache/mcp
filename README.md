@@ -133,3 +133,45 @@ Check out [this blog post](https://www.algolia.com/blog/engineering/algolia-mcp-
 ### Resource templates and root are not supported by Claude desktop right now
 
 [This is a weird one](https://github.com/orgs/modelcontextprotocol/discussions/136), since there is a bunch of content online showing the templates, maybe it's just not GA yet.
+
+
+
+# Run in a Docker container
+
+### Build docker image
+In the root directory of the repository, run:
+ ```
+ $ docker build -t mcp .
+ ```
+ Check the image has been created:
+```
+ $ docker images | grep mcp
+  mcp        latest          6bb2b1324b68   2 hours ago     1GB
+```
+
+Run the MCP container with the 8080 mapped on the host and auth credentials passed as environment variables (transport must be set to sse):
+```
+$ docker run -it -p8080:8080 -e MCP_SERVER_TYPE=sse -e MCP_SSE_PORT=8080 -e ALGOLIA_APP_ID=<APP-ID> -e ALGOLIA_API_KEY=<API-KEY> -e ALGOLIA_INDEX_NAME=<index> mcp
+```
+
+The URL of the MCP server to be set in Claude desktop: `http:127.0.0.1:8080/sse`
+
+Claude config sample:
+```
+{
+  "mcpServers": {
+    "Algolia MCP": {
+      "command": "npx",
+      "args": [
+        "mcp-remote",
+        "http://127.0.0.1:8080/sse",
+        "--header",
+        "Authorization: Bearer <APP-ID>:API-KEY>"
+      ]
+    }
+  }
+}
+```
+
+
+
